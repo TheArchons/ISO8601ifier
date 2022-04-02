@@ -69,7 +69,18 @@ class conversion():
                 pass
         
         return ['timezone', 0]
-        
+
+    def year(s):
+        return ['year', int(s)]   
+
+    def month(s):
+        return ['month', int(s)]
+
+    def date(s):
+        return ['date', int(s)]
+    
+    def time(s):
+        return ['time', int(s)]
 
 def Isoify(data):
     times = {
