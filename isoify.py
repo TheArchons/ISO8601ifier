@@ -1,9 +1,15 @@
-from get import *
+class get():
+    def printWelcome():
+        print("welcome to isoify.py! Print -h for help.")
+    def printHelp():
+        print("isoify.py converts your time and date to ISO 8061 format.")
+        print("-h or --help prints this message.")
+        print("anything else will be interpreted as a time and date.")
 
 def main():
-    printWelcome() #prints welcome message #TODO: make this a function
-    cmd = getCmd() #TODO make this a function
+    get.printWelcome() #prints welcome message
+    cmd = get.getCmd() #TODO make this a function
     if cmd == "-h" or cmd == "--help":
-        printHelp() #TODO make this a function
+        get.printHelp()
     else:
-        getDate() #TODO make this a function
+        get.getDate() #TODO make this a function
