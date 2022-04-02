@@ -82,6 +82,12 @@ class conversion():
     def time(s):
         return ['time', s]  # Do not convert to int because it may be colon seperated
 
+    def era(s):
+        if s == 'BCE' or s == 'BC':
+            return ['era', '-']
+        elif s == 'CE' or s == 'AD':
+            return ['era', '+']
+
 def Isoify(data):
     times = {
         'dates': {'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'},
@@ -126,6 +132,9 @@ def Isoify(data):
                 if isTime.lower() == 'y':
                     out = conversion.time(s)
                     output[out[0]] = out[1]
+            elif s == 'AD' or s == 'BC' or s == 'CE' or s == 'BCE':
+                out = conversion.era(s)
+                output[out[0]] = out[1]
 
         elif type(s) == int:  # if it is a number
             if s > 31:
