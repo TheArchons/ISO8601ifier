@@ -1,6 +1,4 @@
 import sys
-import datetime
-import pytz
 from word2number import w2n
 
 class get():
@@ -41,7 +39,37 @@ class conversion():
         days = {'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6, 'sunday': 7}
         return ['weekday', days[s]]
 
-    
+    def timezone(s):
+        pass  # TODO implement this
+
+    def UTC(s):
+        if '+' in s:
+            s = s.split('+')[1]
+        elif '-' in s:
+            s = s.split('-')[1]
+        else:
+            return ['timezone', 0]
+        
+        if ':' in s:
+            s = s.split(':')
+            try:
+                return ['timezone', int(s[0]) * 3600 + int(s[1]) * 60]
+            except ValueError:
+                pass
+        elif '.' in s:
+            s = s.split('.')
+            try:
+                return ['timezone', int(s[0]) * 3600 + int(s[1]) * 60]
+            except ValueError:
+                pass
+        else:
+            try:
+                return ['timezone', int(s) * 3600]
+            except ValueError:
+                pass
+        
+        return ['timezone', 0]
+        
 
 def Isoify(data):
     times = {
