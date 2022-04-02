@@ -32,3 +32,5 @@ def main():
         get.printHelp()
     else:
         get.getDate() #TODO make this a function
+
+main()
