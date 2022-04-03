@@ -88,6 +88,9 @@ class conversion():
         elif s == 'CE' or s == 'AD':
             return ['era', '+']
 
+    def ordinal(s):
+        return ['ordinal', int(s)]
+
 def Isoify(data):
     times = {
         'dates': {'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'},
@@ -137,23 +140,38 @@ def Isoify(data):
                 output[out[0]] = out[1]
 
         elif type(s) == int:  # if it is a number
-            if s > 31:
+            if s > 366:
                 output.append(conversion.year(s))
+            elif s > 31:
+                yearOrOrdinal = input(f'Is ${s} a year or ordinal? (y/o)')
+                if yearOrOrdinal.lower() == 'y':
+                    out = conversion.ordinal(s)
+                    output[out[0]] = out[1]
+                else:
+                    out = conversion.year(s)
+                    output[out[0]] = out[1]
+
             elif s > 24:
-                yearOrDate = input(f"Is ${str} a year or a day? (y/d) ")
+                yearOrDate = input(f"Is ${str} a year, ordinal or a day? (y/o/d) ")
                 if yearOrDate == 'y':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
-                elif yearOrDate == 'm':
+                elif yearOrDate == 'd':
                     out = conversion.date(s)
                     output[out[0]] = out[1]
+                elif yearOrDate = 'o':
+                    out = conversion.ordinal(s)
+                    output[out[0]] = out[1]
             else:
-                yearOrDateOrTime = input(f"Is ${str} a year, a day, or a time? (y/d/t) ")
+                yearOrDateOrTime = input(f"Is ${str} a year, a day, ordinal, or a time? (y/d/o/t) ")
                 if yearOrDateOrTime == 'y':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
                 elif yearOrDateOrTime == 'd':
                     out = conversion.date(s)
+                    output[out[0]] = out[1]
+                elif yearOrDateOrTime == 'o':
+                    out = conversion.ordinal(s)
                     output[out[0]] = out[1]
                 elif yearOrDateOrTime == 't':
                     out = conversion.time(s)
