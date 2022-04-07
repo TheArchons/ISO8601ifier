@@ -1,5 +1,6 @@
 import sys
 from word2number import w2n
+import re
 
 class get():
     def getArgs():
@@ -16,10 +17,11 @@ class get():
                     date.append(sys.argv[index])
                     index += 1
             except IndexError:
-                pass
+                return date
 
         except IndexError:
             return '-h'
+    
 
     def printWelcome():
         print("welcome to isoify.py! Print -h for help.")
@@ -91,6 +93,16 @@ class conversion():
     def ordinal(s):
         return ['ordinal', int(s)]
 
+def split(data):
+    output = []
+    for s in data:
+        s = re.split('-|/|\|.|\s', s)
+        for i in s:
+            if i != '':
+                output.append(i)
+    
+    return output
+
 def Isoify(data):
     times = {
         'dates': {'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'},
@@ -131,7 +143,7 @@ def Isoify(data):
                 out = conversion.UTC(s)
                 output[out[0]] = out[1]
             elif ':' in s:
-                isTime = input(f'Is ${s} a time? (y/n)')
+                isTime = input(f'Is {s} a time? (y/n)')
                 if isTime.lower() == 'y':
                     out = conversion.time(s)
                     output[out[0]] = out[1]
@@ -141,29 +153,33 @@ def Isoify(data):
 
         elif type(s) == int:  # if it is a number
             if s > 366:
-                output.append(conversion.year(s))
+                output['year'] = conversion.year(s)
             elif s > 31:
-                yearOrOrdinal = input(f'Is ${s} a year or ordinal? (y/o)')
+                yearOrOrdinal = input(f'Is {s} a year, ordinal, or none? (y/o/n)')
                 if yearOrOrdinal.lower() == 'y':
                     out = conversion.ordinal(s)
                     output[out[0]] = out[1]
-                else:
+                elif yearOrOrdinal.lower() == 'o':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
+                else:
+                    continue
 
             elif s > 24:
-                yearOrDate = input(f"Is ${str} a year, ordinal or a day? (y/o/d) ")
+                yearOrDate = input(f"Is {s} a year, ordinal, a day, or none? (y/o/d/n) ")
                 if yearOrDate == 'y':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
                 elif yearOrDate == 'd':
                     out = conversion.date(s)
                     output[out[0]] = out[1]
-                elif yearOrDate = 'o':
+                elif yearOrDate == 'o':
                     out = conversion.ordinal(s)
                     output[out[0]] = out[1]
-            else:
-                yearOrDateOrTime = input(f"Is ${str} a year, a day, ordinal, or a time? (y/d/o/t) ")
+                else:
+                    continue
+            else: #  TODO add month
+                yearOrDateOrTime = input(f"Is {s} a year, a day, ordinal, a time, or none? (y/d/o/t/n) ")
                 if yearOrDateOrTime == 'y':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
@@ -176,21 +192,24 @@ def Isoify(data):
                 elif yearOrDateOrTime == 't':
                     out = conversion.time(s)
                     output[out[0]] = out[1]
+                else:
+                    continue
 
     return output
             
 
 def printISO(data):
-    pass # TODO print in correct iso 8601 format
+    print(data)
+    # TODO print in correct iso 8601 format
         
 
 def main():
     get.printWelcome()  # prints welcome message
-    cmd = get.getArgs()
+    cmd = get.getArgs()  # TODO add optional data checking
     if cmd == "-h" or cmd == "--help":
         get.printHelp()
     else:
-        printISO(Isoify(cmd))
+        printISO(Isoify(split(cmd)))
 
 
 main()
