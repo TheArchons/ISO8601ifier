@@ -178,13 +178,16 @@ def Isoify(data):
                     output[out[0]] = out[1]
                 else:
                     continue
-            else: #  TODO add month
-                yearOrDateOrTime = input(f"Is {s} a year, a day, ordinal, a time, or none? (y/d/o/t/n) ")
+            else:
+                yearOrDateOrTime = input(f"Is {s} a year, a day, month, ordinal, a time, or none? (y/d/m/o/t/n) ")
                 if yearOrDateOrTime == 'y':
                     out = conversion.year(s)
                     output[out[0]] = out[1]
                 elif yearOrDateOrTime == 'd':
                     out = conversion.date(s)
+                    output[out[0]] = out[1]
+                elif yearOrDateOrTime == 'm':
+                    out = conversion.month(s)
                     output[out[0]] = out[1]
                 elif yearOrDateOrTime == 'o':
                     out = conversion.ordinal(s)
