@@ -45,28 +45,16 @@ class conversion():
         pass  # TODO implement this
 
     def UTC(s):
-        if '+' in s:
-            s = s.split('+')[1]
-        elif '-' in s:
-            s = s.split('-')[1]
-        else:
-            return ['timezone', 0]
+        if '+' or '-' not in s:  # if positive or negative is not given, assume positive
+            s = '+' + s
         
         if ':' in s:
-            s = s.split(':')
-            try:
-                return ['timezone', int(s[0]) * 3600 + int(s[1]) * 60]
-            except ValueError:
-                pass
+            return ['timezone', s]
         elif '.' in s:
-            s = s.split('.')
-            try:
-                return ['timezone', int(s[0]) * 3600 + int(s[1]) * 60]
-            except ValueError:
-                pass
+            return ['timezone', s.replace('.', ':')]
         else:
             try:
-                return ['timezone', int(s) * 3600]
+                return ['timezone', s + ":00"]
             except ValueError:
                 pass
         
@@ -82,6 +70,7 @@ class conversion():
         return ['date', int(s)]
     
     def time(s):
+        # TODO add am/pm
         return ['time', s]  # Do not convert to int because it may be colon seperated
 
     def era(s):
@@ -153,7 +142,7 @@ def Isoify(data):
 
         elif type(s) == int:  # if it is a number
             if s > 366:
-                output['year'] = conversion.year(s)
+                output['year'] = conversion.year(s)[1]
             elif s > 31:
                 yearOrOrdinal = input(f'Is {s} a year, ordinal, or none? (y/o/n)')
                 if yearOrOrdinal.lower() == 'y':
@@ -198,12 +187,39 @@ def Isoify(data):
                 else:
                     continue
 
+    #convert to str
+    for key in output:
+        output[key] = str(output[key])
     return output
             
 
 def printISO(data):
-    print(data)
-    # TODO print in correct iso 8601 format
+    if 'year' in data:
+        print(data['year'], end="")
+    if 'month' in data:
+        front = ""
+        if 'year' in data:
+            front = "-"
+        print(front + data['month'], end="")
+    elif 'week' in data:
+        front = ""
+        if 'year' in data:
+            front = "-"
+        print(front + data['week'], end="")
+    elif 'ordinal' in data:
+        front = ""
+        if 'year' in data:
+            front = "-"
+        print('-' + data['ordinal'], end="")
+    if 'date' in data:
+        front = ""
+        if 'year' in data or 'month' in data or 'ordinal' in data:
+            front = "-"
+        print(front + data['date'], end="")
+    if 'time' in data:
+        print("T" + data['time'], end="")
+    if 'timezone' in data:
+        print(data['timezone'], end="")
         
 
 def main():
