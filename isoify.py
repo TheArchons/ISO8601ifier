@@ -71,6 +71,21 @@ class conversion():
     
     def time(s):
         # TODO add am/pm
+
+        #ensure there are 2 colons
+        colonCount = s.count(':')
+        if colonCount == 0:
+            s += ':00:00'
+        elif colonCount == 1:
+            s += ':00'
+        elif colonCount > 2:
+            colons = 0
+            for c in range(len(s) - 1):
+                if s[c] == ':':
+                    colons += 1
+                    if colons > 2:
+                        s = s[:c]
+                        break
         return ['time', s]  # Do not convert to int because it may be colon seperated
 
     def era(s):
